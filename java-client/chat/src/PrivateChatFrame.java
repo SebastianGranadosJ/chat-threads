@@ -44,17 +44,23 @@ public class PrivateChatFrame extends JFrame {
         log.setEditable(false);
         log.setLineWrap(true);
         log.setWrapStyleWord(true);
+        UiTheme.styleTextArea(log);
 
         DefaultListModel<String> listModel = new DefaultListModel<>();
         listModel.addElement(username);
         listModel.addElement(contact);
         JList<String> userList = new JList<>(listModel);
         userList.setPreferredSize(new Dimension(150, 0));
+        userList.setBackground(UiTheme.PANEL);
+        userList.setSelectionBackground(UiTheme.ACCENT);
+        userList.setSelectionForeground(UiTheme.TEXT_ON_ACCENT);
 
         messageField = new JTextField();
         JButton sendButton = new JButton("Enviar");
+        UiTheme.styleButton(sendButton);
 
         JPanel bottom = new JPanel(new BorderLayout(6, 0));
+        bottom.setBackground(UiTheme.BACKGROUND);
         bottom.add(messageField, BorderLayout.CENTER);
         bottom.add(sendButton, BorderLayout.EAST);
 
@@ -64,8 +70,10 @@ public class PrivateChatFrame extends JFrame {
             new JScrollPane(userList)
         );
         split.setResizeWeight(0.8);
+        split.setBackground(UiTheme.BACKGROUND);
 
         setLayout(new BorderLayout());
+        getContentPane().setBackground(UiTheme.BACKGROUND);
         add(split, BorderLayout.CENTER);
         add(bottom, BorderLayout.SOUTH);
 

@@ -8,6 +8,8 @@ import tkinter as tk
 from tkinter import ttk
 from typing import Callable, List
 
+from theme import style_listbox, style_text_widget
+
 
 class MainScreen(ttk.Frame):
 
@@ -35,6 +37,7 @@ class MainScreen(ttk.Frame):
         log_frame.columnconfigure(0, weight=1)
 
         self._log = tk.Text(log_frame, state="disabled", wrap="word")
+        style_text_widget(self._log)
         self._log.grid(row=0, column=0, sticky="nsew")
         log_scroll = ttk.Scrollbar(log_frame, orient="vertical", command=self._log.yview)
         log_scroll.grid(row=0, column=1, sticky="ns")
@@ -48,6 +51,7 @@ class MainScreen(ttk.Frame):
 
         ttk.Label(users_frame, text="Usuarios conectados").grid(row=0, column=0, sticky="w")
         self._user_listbox = tk.Listbox(users_frame)
+        style_listbox(self._user_listbox)
         self._user_listbox.grid(row=1, column=0, sticky="nsew")
         self._user_listbox.bind("<Double-Button-1>", self._on_user_double_click)
 

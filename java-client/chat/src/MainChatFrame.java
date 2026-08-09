@@ -50,15 +50,21 @@ public class MainChatFrame extends JFrame {
         groupLog.setEditable(false);
         groupLog.setLineWrap(true);
         groupLog.setWrapStyleWord(true);
+        UiTheme.styleTextArea(groupLog);
 
         userListModel = new DefaultListModel<>();
         userList = new JList<>(userListModel);
         userList.setPreferredSize(new Dimension(150, 0));
+        userList.setBackground(UiTheme.PANEL);
+        userList.setSelectionBackground(UiTheme.ACCENT);
+        userList.setSelectionForeground(UiTheme.TEXT_ON_ACCENT);
 
         messageField = new JTextField();
         JButton sendButton = new JButton("Enviar");
+        UiTheme.styleButton(sendButton);
 
         JPanel bottom = new JPanel(new BorderLayout(6, 0));
+        bottom.setBackground(UiTheme.BACKGROUND);
         bottom.add(messageField, BorderLayout.CENTER);
         bottom.add(sendButton, BorderLayout.EAST);
 
@@ -68,8 +74,10 @@ public class MainChatFrame extends JFrame {
             new JScrollPane(userList)
         );
         split.setResizeWeight(0.8);
+        split.setBackground(UiTheme.BACKGROUND);
 
         setLayout(new BorderLayout());
+        getContentPane().setBackground(UiTheme.BACKGROUND);
         add(split, BorderLayout.CENTER);
         add(bottom, BorderLayout.SOUTH);
 
@@ -134,8 +142,7 @@ public class MainChatFrame extends JFrame {
                 break;
 
             case "USER_CONNECTED":
-                if (msg.sender != null && !msg.sender.equals(username)
-                        && !userListModel.contains(msg.sender)) {
+                if (msg.sender != null && !userListModel.contains(msg.sender)) {
                     userListModel.addElement(msg.sender);
                 }
                 break;
@@ -169,12 +176,18 @@ public class MainChatFrame extends JFrame {
 
     private void populateUserList(String content) {
         userListModel.clear();
-        if (content == null || content.isEmpty()) return;
-        for (String name : content.split(",")) {
-            String trimmed = name.trim();
-            if (!trimmed.isEmpty() && !trimmed.equals(username)) {
-                userListModel.addElement(trimmed);
+        if (content != null && !content.isEmpty()) {
+            for (String name : content.split(",")) {
+                String trimmed = name.trim();
+                if (!trimmed.isEmpty() && !userListModel.contains(trimmed)) {
+                    userListModel.addElement(trimmed);
+                }
             }
+        }
+        // El servidor puede o no incluirme a mí mismo en USER_LIST; me aseguro
+        // de aparecer igual, ya que la lista debe mostrar también al propio usuario.
+        if (!userListModel.contains(username)) {
+            userListModel.addElement(username);
         }
     }
 

@@ -24,6 +24,7 @@ from login_screen import LoginScreen
 from main_screen import MainScreen
 from models import ChatMessage
 from private_chat_window import PrivateChatWindow
+from theme import apply_theme
 
 
 class ChatApp:
@@ -33,6 +34,7 @@ class ChatApp:
         self.root = tk.Tk()
         self.root.title("Chat")
         self.root.protocol("WM_DELETE_WINDOW", self._on_root_close)
+        apply_theme(self.root)
 
         self._chat_client = ChatClient()
         self._listener: Optional[ListenerThread] = None
@@ -71,6 +73,11 @@ class ChatApp:
             on_send_group=self._send_group_message,
             on_open_private=self.open_private_window,
         )
+        # El servidor excluye al propio usuario de USER_LIST (ver
+        # WorkerThread.buildUserList) porque asume que la GUI ya sabe que
+        # está conectada; acá la mostramos igual para que la lista sea
+        # "todos los conectados", incluido uno mismo.
+        self._main_screen.add_user(self._username)
 
     # ------------------------------------------------------------------
     # Login
@@ -139,6 +146,10 @@ class ChatApp:
         if mtype == "USER_LIST":
             content = msg.get("content") or ""
             users = [u for u in content.split(",") if u]
+            # El servidor no incluye al propio usuario en la lista; lo
+            # agregamos acá para que la lista muestre a todos los conectados.
+            if self._username not in users:
+                users.append(self._username)
             self._main_screen.set_users(users)
         elif mtype == "USER_CONNECTED":
             user = msg.get("sender") or msg.get("content")

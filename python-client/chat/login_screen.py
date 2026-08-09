@@ -8,6 +8,7 @@ from tkinter import ttk
 from typing import Callable
 
 from client_socket_factory import DEFAULT_HOST
+from theme import ERROR
 
 
 class LoginScreen(ttk.Frame):
@@ -36,7 +37,7 @@ class LoginScreen(ttk.Frame):
         self._connect_button.grid(row=3, column=0, columnspan=2, pady=(15, 5))
 
         self._error_var = tk.StringVar()
-        self._error_label = ttk.Label(self, textvariable=self._error_var, foreground="red")
+        self._error_label = ttk.Label(self, textvariable=self._error_var, foreground=ERROR)
         self._error_label.grid(row=4, column=0, columnspan=2)
 
         self.columnconfigure(1, weight=1)

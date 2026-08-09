@@ -30,25 +30,35 @@ public class LoginFrame extends JFrame {
 
         JPanel form = new JPanel(new GridLayout(2, 2, 8, 8));
         form.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+        form.setBackground(UiTheme.BACKGROUND);
 
         hostField = new JTextField("localhost");
         usernameField = new JTextField();
 
-        form.add(new JLabel("Servidor:"));
+        JLabel serverLabel = new JLabel("Servidor:");
+        JLabel userLabel = new JLabel("Usuario:");
+        serverLabel.setForeground(UiTheme.ACCENT);
+        userLabel.setForeground(UiTheme.ACCENT);
+
+        form.add(serverLabel);
         form.add(hostField);
-        form.add(new JLabel("Usuario:"));
+        form.add(userLabel);
         form.add(usernameField);
 
         connectButton = new JButton("Conectar");
+        UiTheme.styleButton(connectButton);
+
         statusLabel = new JLabel(" ");
         statusLabel.setForeground(java.awt.Color.RED);
 
         JPanel bottom = new JPanel(new BorderLayout());
         bottom.setBorder(BorderFactory.createEmptyBorder(0, 12, 12, 12));
+        bottom.setBackground(UiTheme.BACKGROUND);
         bottom.add(connectButton, BorderLayout.NORTH);
         bottom.add(statusLabel, BorderLayout.SOUTH);
 
         setLayout(new BorderLayout());
+        getContentPane().setBackground(UiTheme.BACKGROUND);
         add(form, BorderLayout.CENTER);
         add(bottom, BorderLayout.SOUTH);
 

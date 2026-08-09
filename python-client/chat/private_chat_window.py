@@ -9,6 +9,8 @@ import tkinter as tk
 from tkinter import ttk
 from typing import Callable
 
+from theme import BG, style_listbox, style_text_widget
+
 
 class PrivateChatWindow(tk.Toplevel):
 
@@ -29,6 +31,7 @@ class PrivateChatWindow(tk.Toplevel):
 
         self.title(f"Chat privado — {peer}")
         self.protocol("WM_DELETE_WINDOW", self._handle_close)
+        self.configure(bg=BG)
 
         container = ttk.Frame(self, padding=8)
         container.pack(expand=True, fill="both")
@@ -42,6 +45,7 @@ class PrivateChatWindow(tk.Toplevel):
         log_frame.columnconfigure(0, weight=1)
 
         self._log = tk.Text(log_frame, state="disabled", wrap="word")
+        style_text_widget(self._log)
         self._log.grid(row=0, column=0, sticky="nsew")
         log_scroll = ttk.Scrollbar(log_frame, orient="vertical", command=self._log.yview)
         log_scroll.grid(row=0, column=1, sticky="ns")
@@ -54,6 +58,7 @@ class PrivateChatWindow(tk.Toplevel):
 
         ttk.Label(users_frame, text="Participantes").grid(row=0, column=0, sticky="w")
         participants = tk.Listbox(users_frame)
+        style_listbox(participants)
         participants.grid(row=1, column=0, sticky="nsew")
         participants.insert("end", own_username)
         participants.insert("end", peer)
